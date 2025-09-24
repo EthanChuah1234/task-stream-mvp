@@ -43,7 +43,11 @@ export default function ProjectView() {
     .slice(0, 3);
 
   const handleCreateTask = (taskData: { title: string; description: string; deadline: string; status: 'todo' }) => {
-    addTask(project.id, taskData);
+    addTask(project.id, {
+      ...taskData,
+      xp_reward: 10,
+      focus_time: 0,
+    });
   };
 
   const handleUpdateTask = (taskId: string, updates: any) => {

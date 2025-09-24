@@ -21,9 +21,12 @@ export function useProjects() {
   const createProject = (name: string, description: string) => {
     const newProject: Project = {
       id: Date.now().toString(),
+      user_id: 'local',
       name,
       description,
       tasks: [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
     saveProjects([...projects, newProject]);
@@ -41,10 +44,13 @@ export function useProjects() {
     saveProjects(projects.filter(project => project.id !== projectId));
   };
 
-  const addTask = (projectId: string, task: Omit<Task, 'id' | 'createdAt'>) => {
+  const addTask = (projectId: string, task: Omit<Task, 'id' | 'createdAt' | 'project_id' | 'created_at' | 'updated_at'>) => {
     const newTask: Task = {
       ...task,
       id: Date.now().toString(),
+      project_id: projectId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
     
