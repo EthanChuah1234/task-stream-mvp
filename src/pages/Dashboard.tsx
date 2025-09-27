@@ -1,6 +1,7 @@
 import { ProjectCard } from '@/components/ProjectCard';
 import { CreateProjectDialog } from '@/components/CreateProjectDialog';
 import { XPDisplay } from '@/components/gamification/XPDisplay';
+import { ThemeSelector } from '@/components/ThemeSelector';
 import { useProjects } from '@/hooks/useProjects';
 import { useProfile } from '@/hooks/useProfile';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +35,7 @@ export default function Dashboard() {
               </p>
             </div>
             <div className="flex gap-4 items-start">
+              <ThemeSelector />
               {profile && <XPDisplay profile={profile} />}
               <CreateProjectDialog onCreateProject={handleCreateProject} />
             </div>

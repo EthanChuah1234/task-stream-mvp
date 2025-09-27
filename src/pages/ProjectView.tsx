@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProjects } from '@/hooks/useProjects';
 import { KanbanBoard } from '@/components/KanbanBoard';
 import { CreateTaskDialog } from '@/components/CreateTaskDialog';
+import { ThemeSelector } from '@/components/ThemeSelector';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, CalendarDays, CheckCircle2, Clock, MoreHorizontal } from 'lucide-react';
@@ -83,7 +84,9 @@ export default function ProjectView() {
                 <p className="text-muted-foreground">{project.description}</p>
               </div>
             </div>
-            <DropdownMenu>
+            <div className="flex items-center gap-4">
+              <ThemeSelector />
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm">
                   <MoreHorizontal className="w-4 h-4" />
@@ -113,6 +116,7 @@ export default function ProjectView() {
                 </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
