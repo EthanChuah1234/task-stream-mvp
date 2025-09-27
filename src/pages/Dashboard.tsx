@@ -1,11 +1,14 @@
 import { ProjectCard } from '@/components/ProjectCard';
 import { CreateProjectDialog } from '@/components/CreateProjectDialog';
+import { XPDisplay } from '@/components/gamification/XPDisplay';
 import { useProjects } from '@/hooks/useProjects';
+import { useProfile } from '@/hooks/useProfile';
 import { useNavigate } from 'react-router-dom';
 import { FolderOpen, Target } from 'lucide-react';
 
 export default function Dashboard() {
   const { projects, createProject } = useProjects();
+  const { profile } = useProfile();
   const navigate = useNavigate();
 
   const handleCreateProject = (name: string, description: string) => {
@@ -22,7 +25,7 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold text-foreground mb-2">
                 Welcome to ProjectMate
               </h1>
@@ -30,7 +33,10 @@ export default function Dashboard() {
                 Organize your projects and stay on top of your tasks
               </p>
             </div>
-            <CreateProjectDialog onCreateProject={handleCreateProject} />
+            <div className="flex gap-4 items-start">
+              {profile && <XPDisplay profile={profile} />}
+              <CreateProjectDialog onCreateProject={handleCreateProject} />
+            </div>
           </div>
           
           {projects.length > 0 && (

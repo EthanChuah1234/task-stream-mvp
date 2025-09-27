@@ -4,17 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { AITaskBreakdownDialog } from '@/components/ai/AITaskBreakdownDialog';
+import { Sparkles } from 'lucide-react';
 
 interface CreateTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreateTask: (task: { title: string; description: string; deadline: string; status: 'todo' }) => void;
+  onCreateTask: (task: { title: string; description: string; deadline: string; status: 'todo'; xp_reward: number }) => void;
+  onCreateMultipleTasks?: (tasks: Array<{ title: string; description: string; deadline: string; status: 'todo'; xp_reward: number }>) => void;
 }
 
-export function CreateTaskDialog({ open, onOpenChange, onCreateTask }: CreateTaskDialogProps) {
+export function CreateTaskDialog({ open, onOpenChange, onCreateTask, onCreateMultipleTasks }: CreateTaskDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
+  const [showAIDialog, setShowAIDialog] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +28,18 @@ export function CreateTaskDialog({ open, onOpenChange, onCreateTask }: CreateTas
         description: description.trim(),
         deadline,
         status: 'todo',
+        xp_reward: 10,
       });
       setTitle('');
       setDescription('');
       setDeadline('');
       onOpenChange(false);
+    }
+  };
+
+  const handleAITasksCreated = (tasks: Array<{ title: string; description: string; deadline: string; status: 'todo'; xp_reward: number }>) => {
+    if (onCreateMultipleTasks) {
+      onCreateMultipleTasks(tasks);
     }
   };
 
@@ -82,16 +93,33 @@ export function CreateTaskDialog({ open, onOpenChange, onCreateTask }: CreateTas
               required
             />
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button 
+              type="button" 
+              variant="secondary" 
+              onClick={() => setShowAIDialog(true)}
+              className="w-full sm:w-auto"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Breakdown
             </Button>
-            <Button type="submit" className="bg-gradient-primary hover:opacity-90">
-              Create Task
-            </Button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" className="bg-gradient-primary hover:opacity-90">
+                Create Task
+              </Button>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>
+      
+      <AITaskBreakdownDialog
+        open={showAIDialog}
+        onOpenChange={setShowAIDialog}
+        onTasksCreated={handleAITasksCreated}
+      />
     </Dialog>
   );
 }
